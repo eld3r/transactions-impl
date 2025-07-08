@@ -4,6 +4,6 @@ namespace Transactions.Services;
 
 public interface ITransactionService
 {
-    Task<SetTransactionResponse> CreateTransactionAsync(SetTransactionRequest request);
-    Task<GetTransactionResponse> GetTransactionAsync(Guid id);
+    Task<SetTransactionResponse> CreateAsync(SetTransactionRequest request);
+    Task<GetTransactionResponse> GetAsync(Guid id);
 }

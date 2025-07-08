@@ -11,12 +11,12 @@ public class TransactionController(ITransactionService transactionService) : Con
     [HttpPost()]
     public async Task<ActionResult<SetTransactionResponse>> SetAsync([FromBody] SetTransactionRequest request)
     {
-        return await transactionService.CreateTransactionAsync(request);
+        return await transactionService.CreateAsync(request);
     }
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<GetTransactionResponse>> GetAsync(Guid id)
     {
-        return await transactionService.GetTransactionAsync(id);
+        return await transactionService.GetAsync(id);
     }
 }

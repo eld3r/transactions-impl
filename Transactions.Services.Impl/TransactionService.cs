@@ -1,16 +1,22 @@
-﻿using Transactions.Services.Contracts;
+﻿using Mapster;
+using Transactions.Dal;
+using Transactions.Domain;
+using Transactions.Services.Contracts;
 
 namespace Transactions.Services.Impl;
 
-public class TransactionService : ITransactionService
+public class TransactionService(ITransactionRepository transactionRepository) : ITransactionService
 {
-    public Task<SetTransactionResponse> CreateTransactionAsync(SetTransactionRequest request)
+    public async Task<SetTransactionResponse> CreateAsync(SetTransactionRequest request)
     {
-        throw new NotImplementedException();
+        var transaction = request.Adapt<Transaction>();
+        var insertDateTime = await transactionRepository.CreateAsync(transaction);
+        return new SetTransactionResponse() { InsertDateTime = insertDateTime };
     }
 
-    public Task<GetTransactionResponse> GetTransactionAsync(Guid id)
+    public async Task<GetTransactionResponse> GetAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var transaction = await transactionRepository.GetAsync(id);
+        return transaction.Adapt<GetTransactionResponse>();
     }
 }

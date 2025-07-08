@@ -7,10 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Transactions.Dal\Transactions.Dal.csproj" />
       <ProjectReference Include="..\Transactions.Services\Transactions.Services.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Mapster" Version="7.4.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
     </ItemGroup>
 
