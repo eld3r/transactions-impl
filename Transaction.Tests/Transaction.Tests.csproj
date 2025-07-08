@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FakeItEasy" Version="8.3.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0"/>
+        <PackageReference Include="MSTest.TestAdapter" Version="3.0.4"/>
+        <PackageReference Include="MSTest.TestFramework" Version="3.0.4"/>
+        <PackageReference Include="coverlet.collector" Version="6.0.0"/>
+        <PackageReference Include="Shouldly" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Transactions.Dal\Transactions.Dal.csproj" />
+      <ProjectReference Include="..\Transactions.Services.Impl\Transactions.Services.Impl.csproj" />
+      <ProjectReference Include="..\Transactions.Services\Transactions.Services.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+        <HintPath>..\..\..\Users\bzdrsh\.dotnet\shared\Microsoft.AspNetCore.App\8.0.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.Domain", "Tran
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.Dal", "Transactions.Dal\Transactions.Dal.csproj", "{147BAF21-AFAE-4F75-8627-329D0C3CF1CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transaction.Tests", "Transaction.Tests\Transaction.Tests.csproj", "{AC526691-B0D2-4338-8A67-C8F0575B762B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{147BAF21-AFAE-4F75-8627-329D0C3CF1CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{147BAF21-AFAE-4F75-8627-329D0C3CF1CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{147BAF21-AFAE-4F75-8627-329D0C3CF1CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC526691-B0D2-4338-8A67-C8F0575B762B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC526691-B0D2-4338-8A67-C8F0575B762B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC526691-B0D2-4338-8A67-C8F0575B762B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC526691-B0D2-4338-8A67-C8F0575B762B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
