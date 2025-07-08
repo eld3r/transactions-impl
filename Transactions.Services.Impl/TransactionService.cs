@@ -1,14 +1,17 @@
 ﻿using Mapster;
+using Microsoft.Extensions.Logging;
 using Transactions.Dal;
 using Transactions.Domain;
 using Transactions.Services.Contracts;
 
 namespace Transactions.Services.Impl;
 
-public class TransactionService(ITransactionRepository transactionRepository) : ITransactionService
+public class TransactionService(ITransactionRepository transactionRepository, ILogger<TransactionService> transactionService) : ITransactionService
 {
     public async Task<SetTransactionResponse> CreateAsync(SetTransactionRequest request)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         var transaction = request.Adapt<Transaction>();
         var insertDateTime = await transactionRepository.CreateAsync(transaction);
         return new SetTransactionResponse() { InsertDateTime = insertDateTime };
