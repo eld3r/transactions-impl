@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Mvc;
+using Transactions.Api.Middlewares;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +19,25 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 //registrations here
 builder.Services.AddLogging();
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var problemDetails = new ValidationProblemDetails(context.ModelState)
+        {
+            Title = "One or more validation errors occurred.",
+            Status = StatusCodes.Status400BadRequest,
+            //todo: подумать ою идентификаторах
+            Type = "about:blank",
+            Instance = context.HttpContext.Request.Path
+        };
+
+        return new BadRequestObjectResult(problemDetails)
+        {
+            ContentTypes = { "application/problem+json" }
+        };
+    };
+});
 
 var app = builder.Build();
 
@@ -40,5 +62,6 @@ app.UseCors(opts => opts
     .AllowAnyMethod()
     .AllowAnyHeader());
 
+app.UseMiddleware<ProblemDetails500Middleware>();
 app.MapControllers();
 app.Run();
