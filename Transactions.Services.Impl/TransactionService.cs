@@ -6,7 +6,9 @@ using Transactions.Services.Contracts;
 
 namespace Transactions.Services.Impl;
 
-public class TransactionService(ITransactionRepository transactionRepository, ILogger<TransactionService> transactionService) : ITransactionService
+public class TransactionService(
+    ITransactionRepository transactionRepository,
+    ILogger<TransactionService> logger) : ITransactionService
 {
     public async Task<SetTransactionResponse> CreateAsync(SetTransactionRequest request)
     {

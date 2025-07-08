@@ -18,7 +18,9 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddControllers();
 
-builder.Services.AddArticlesServices();
+builder.Services
+    .AddTransactionsServices()
+    .AddTransactionsPgDal();
 
 builder.Services.AddLogging();
 builder.Services.Configure<ApiBehaviorOptions>(options =>

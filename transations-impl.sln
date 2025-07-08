@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.Dal", "Transac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transaction.Tests", "Transaction.Tests\Transaction.Tests.csproj", "{AC526691-B0D2-4338-8A67-C8F0575B762B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.Dal.PostgresEfCore", "Transactions.Dal.PostgresEfCore\Transactions.Dal.PostgresEfCore.csproj", "{45019CE6-9DC3-4F99-B7F1-17598EF7C2E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{AC526691-B0D2-4338-8A67-C8F0575B762B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC526691-B0D2-4338-8A67-C8F0575B762B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC526691-B0D2-4338-8A67-C8F0575B762B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45019CE6-9DC3-4F99-B7F1-17598EF7C2E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45019CE6-9DC3-4F99-B7F1-17598EF7C2E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45019CE6-9DC3-4F99-B7F1-17598EF7C2E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45019CE6-9DC3-4F99-B7F1-17598EF7C2E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
