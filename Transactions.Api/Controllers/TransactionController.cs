@@ -1,21 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Transactions.Services;
 using Transactions.Services.Contracts;
 
 namespace Transactions.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TransactionController() : ControllerBase
+public class TransactionController(ITransactionService transactionService) : ControllerBase
 {
     [HttpPost()]
-    public async Task<ActionResult<SetTransactionResponse>> Set([FromBody] SetTransactionRequest request)
+    public async Task<ActionResult<SetTransactionResponse>> SetAsync([FromBody] SetTransactionRequest request)
     {
-        return new SetTransactionResponse();
+        return await transactionService.CreateTransactionAsync(request);
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<GetTransactionResponse>> Get()
+    public async Task<ActionResult<GetTransactionResponse>> GetAsync(Guid id)
     {
-        return new GetTransactionResponse();
+        return await transactionService.GetTransactionAsync(id);
     }
 }
