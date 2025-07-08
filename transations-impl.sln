@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.Api", "Transac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.Services", "Transactions.Services\Transactions.Services.csproj", "{BCA13C69-B7C4-4CBF-B6BF-807BE6C1536F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.Services.Impl", "Transactions.Services.Impl\Transactions.Services.Impl.csproj", "{14F4CD65-2F7C-453E-8CA2-331AD6270E0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{BCA13C69-B7C4-4CBF-B6BF-807BE6C1536F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCA13C69-B7C4-4CBF-B6BF-807BE6C1536F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCA13C69-B7C4-4CBF-B6BF-807BE6C1536F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14F4CD65-2F7C-453E-8CA2-331AD6270E0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14F4CD65-2F7C-453E-8CA2-331AD6270E0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14F4CD65-2F7C-453E-8CA2-331AD6270E0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14F4CD65-2F7C-453E-8CA2-331AD6270E0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

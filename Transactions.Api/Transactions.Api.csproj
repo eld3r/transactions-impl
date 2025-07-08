@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Transactions.Services.Impl\Transactions.Services.Impl.csproj" />
       <ProjectReference Include="..\Transactions.Services\Transactions.Services.csproj" />
     </ItemGroup>
 

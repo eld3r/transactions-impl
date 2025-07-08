@@ -17,7 +17,9 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddControllers();
-//registrations here
+
+builder.Services.AddArticlesServices();
+
 builder.Services.AddLogging();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
