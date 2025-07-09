@@ -43,3 +43,11 @@ Response 200 OK:
 - Способ логирования - на усмотрения соискателя.
 - Дополнительная функциональность - на усмотрение соискателя.
 - Приветствуется использование docker compose для быстрого запуска тестового задания.
+
+### Миграции
+
+При изменении конфигурации модели необходимо добавить миграцию следующей командой
+
+```shell
+dotnet ef migrations add Name --project Transactions.Dal.PostgresEfCore --startup-project Transactions.Api -- --Enviroment localhost
+```

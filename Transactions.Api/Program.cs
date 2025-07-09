@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Transactions.Api.Middlewares;
+using Transactions.Dal.PostgresEfCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,10 +51,8 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    //var db = scope.ServiceProvider.GetRequiredService<TransactionsDbContext>();
-    //await db.Database.EnsureDeletedAsync();
-    //await db.Database.EnsureCreatedAsync();
-    //migrateAsync here
+    var db = scope.ServiceProvider.GetRequiredService<TransactionsDbContext>();
+    await db.Database.MigrateAsync();
 }
 
 // Configure the HTTP request pipeline.
