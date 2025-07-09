@@ -30,6 +30,7 @@ public class TransactionRepositoryTests
 
         using var scope = _serviceProvider.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<TransactionsDbContext>();
+        await dbContext.Database.EnsureDeletedAsync();
         await dbContext.Database.MigrateAsync();
     }
     
@@ -93,6 +94,10 @@ public class TransactionRepositoryTests
     [TestMethod]
     public async Task CreateTransactionsOverLimitTest()
     {
+        var dbContext = _serviceProvider.GetRequiredService<TransactionsDbContext>();
+        dbContext.Transactions.RemoveRange(dbContext.Transactions);
+        await dbContext.SaveChangesAsync();
+        
         var target = _serviceProvider.GetRequiredService<ITransactionRepository>();
 
         var i = 0;
