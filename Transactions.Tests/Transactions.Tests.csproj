@@ -11,6 +11,11 @@
 
     <ItemGroup>
         <PackageReference Include="FakeItEasy" Version="8.3.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.18" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0"/>
         <PackageReference Include="MSTest.TestAdapter" Version="3.0.4"/>
         <PackageReference Include="MSTest.TestFramework" Version="3.0.4"/>
@@ -19,15 +24,17 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Transactions.Dal.PostgresEfCore\Transactions.Dal.PostgresEfCore.csproj" />
       <ProjectReference Include="..\Transactions.Dal\Transactions.Dal.csproj" />
       <ProjectReference Include="..\Transactions.Services.Impl\Transactions.Services.Impl.csproj" />
       <ProjectReference Include="..\Transactions.Services\Transactions.Services.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.Extensions.Logging.Abstractions">
-        <HintPath>..\..\..\Users\bzdrsh\.dotnet\shared\Microsoft.AspNetCore.App\8.0.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
-      </Reference>
+      <None Remove="testconfig.localhost.json" />
+      <Content Include="testconfig.localhost.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.Domain", "Tran
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.Dal", "Transactions.Dal\Transactions.Dal.csproj", "{147BAF21-AFAE-4F75-8627-329D0C3CF1CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transaction.Tests", "Transaction.Tests\Transaction.Tests.csproj", "{AC526691-B0D2-4338-8A67-C8F0575B762B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.Tests", "Transactions.Tests\Transactions.Tests.csproj", "{AC526691-B0D2-4338-8A67-C8F0575B762B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.Dal.PostgresEfCore", "Transactions.Dal.PostgresEfCore\Transactions.Dal.PostgresEfCore.csproj", "{45019CE6-9DC3-4F99-B7F1-17598EF7C2E2}"
 EndProject

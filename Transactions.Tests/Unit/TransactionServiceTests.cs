@@ -1,13 +1,12 @@
 using FakeItEasy;
 using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
-using Transaction.Tests.Extensions;
 using Transactions.Dal;
 using Transactions.Services;
 using Transactions.Services.Contracts;
 using Transactions.Services.Impl;
 
-namespace Transaction.Tests;
+namespace Transactions.Tests.Unit;
 
 [TestClass]
 [TestCategory("Unit")]
