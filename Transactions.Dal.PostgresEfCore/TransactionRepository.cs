@@ -24,7 +24,7 @@ public class TransactionRepository(TransactionsDbContext dbContext) : ITransacti
         await dbContext.SaveChangesAsync();
         
         //todo Excetion
-        return transactionEntity.CreatedAt ?? throw new Exception("TransactionEntity.CreatedAt should not be null after insert");
+        return transactionEntity.CreatedAt?.ToLocalTime() ?? throw new Exception("TransactionEntity.CreatedAt should not be null after insert");
     }
 
     public async Task<Transaction> GetAsync(Guid id)
