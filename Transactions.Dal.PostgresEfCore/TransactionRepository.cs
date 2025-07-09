@@ -1,16 +1,30 @@
-﻿using Transactions.Domain;
+﻿using Mapster;
+using Microsoft.EntityFrameworkCore;
+using Transactions.Dal.PostgresEfCore.Model;
+using Transactions.Domain;
 
 namespace Transactions.Dal.PostgresEfCore;
 
-public class TransactionRepository : ITransactionRepository
+public class TransactionRepository(TransactionsDbContext dbContext) : ITransactionRepository
 {
-    public Task<DateTime> CreateAsync(Transaction transaction)
+    public async Task<DateTime> CreateAsync(Transaction transaction)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(transaction);
+        
+        var transactionEntity = transaction.Adapt<TransactionEntity>();
+        
+        await dbContext.AddAsync(transactionEntity);
+        await dbContext.SaveChangesAsync();
+        return transactionEntity.TransactionDate;
     }
 
-    public Task<Transaction> GetAsync(Guid id)
+    public async Task<Transaction> GetAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var result = await dbContext.Transactions.FirstOrDefaultAsync(t => t.Id == id);
+        
+        if (result == null)
+            throw new KeyNotFoundException($"Transaction with id {id} not found");
+        
+        return result.Adapt<Transaction>();
     }
 }
