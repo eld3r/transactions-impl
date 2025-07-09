@@ -20,7 +20,7 @@ builder.Services.AddControllers();
 
 builder.Services
     .AddTransactionsServices()
-    .AddTransactionsPgDal();
+    .AddTransactionsPgDal(builder.Configuration);
 
 builder.Services.AddLogging();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
