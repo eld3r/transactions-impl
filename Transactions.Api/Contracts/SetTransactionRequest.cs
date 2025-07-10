@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Transactions.Services.Attributes;
+using Transactions.Api.Attributes;
 
-namespace Transactions.Services.Contracts;
+namespace Transactions.Api.Contracts;
 
 public record SetTransactionRequest
 {

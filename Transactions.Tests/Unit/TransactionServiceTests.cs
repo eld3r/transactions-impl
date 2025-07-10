@@ -1,10 +1,9 @@
 using FakeItEasy;
 using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
+using Transactions.Api.Contracts;
+using Transactions.Api.Services;
 using Transactions.Dal;
-using Transactions.Services;
-using Transactions.Services.Contracts;
-using Transactions.Services.Impl;
 
 namespace Transactions.Tests.Unit;
 

@@ -1,4 +1,4 @@
-﻿namespace Transactions.Services.Contracts;
+﻿namespace Transactions.Api.Contracts;
 
 public record SetTransactionResponse
 {

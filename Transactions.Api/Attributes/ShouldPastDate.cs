@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Transactions.Services.Attributes;
+namespace Transactions.Api.Attributes;
 
 public class ShouldPastDate() : ValidationAttribute
 {

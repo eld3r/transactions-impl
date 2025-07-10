@@ -1,6 +1,6 @@
-﻿using Transactions.Services.Contracts;
+﻿using Transactions.Api.Contracts;
 
-namespace Transactions.Services;
+namespace Transactions.Api.Services;
 
 public interface ITransactionService
 {

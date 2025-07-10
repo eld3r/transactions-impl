@@ -1,10 +1,9 @@
 ﻿using Mapster;
-using Microsoft.Extensions.Logging;
+using Transactions.Api.Contracts;
 using Transactions.Dal;
 using Transactions.Domain;
-using Transactions.Services.Contracts;
 
-namespace Transactions.Services.Impl;
+namespace Transactions.Api.Services;
 
 public class TransactionService(
     ITransactionRepository transactionRepository,

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Transactions.Services;
-using Transactions.Services.Contracts;
+using Transactions.Api.Contracts;
+using Transactions.Api.Services;
 
 namespace Transactions.Api.Controllers;
 
