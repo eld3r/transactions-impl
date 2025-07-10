@@ -10,6 +10,10 @@ public class TransactionService(
 {
     public async Task<SetTransactionResponse> CreateAsync(SetTransactionRequest request)
     {
+        //todo: Возможно, нужно переосмыслить поведение сервиса: проверку транзакции
+        //на существование нужно бы осуществлять именно здесь, а так же проверять остальные 
+        //параметры и выкидывать птичку, если что-то не сходится при повторной отправке
+        //с другими суммой или датой
         ArgumentNullException.ThrowIfNull(request);
 
         logger.LogInformation("Creating a new transaction with id {Guid}", request.Id);
