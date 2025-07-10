@@ -14,7 +14,7 @@ public class ProblemDetailsExceptionMiddleware(RequestDelegate next, ILogger<Pro
         }
         catch (KeyNotFoundException knfe)
         {
-            //todo подумать над своим исключением, содержащим id
+            //своё исключение скорее не требуется, так как id видно в Instance проблемы
             var problemDetails = new ProblemDetailsBuilder()
                 .WithStatus(StatusCodes.Status404NotFound)
                 .WithDetail("Transaction with provided id was not found")
