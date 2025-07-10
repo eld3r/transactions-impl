@@ -3,11 +3,8 @@ using Transactions.Dal.PostgresEfCore.Model;
 
 namespace Transactions.Dal.PostgresEfCore;
 
-public class TransactionsDbContext : DbContext
+public class TransactionsDbContext(DbContextOptions<TransactionsDbContext> options) : DbContext(options)
 {
-    public TransactionsDbContext(DbContextOptions<TransactionsDbContext> options)
-        : base(options) { }
-
     public DbSet<TransactionEntity> Transactions => Set<TransactionEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

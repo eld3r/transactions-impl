@@ -1,7 +1,9 @@
 ﻿using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using Transactions.Dal.PostgresEfCore.Model;
 using Transactions.Domain;
+using Transactions.Domain.Exceptions;
 
 namespace Transactions.Dal.PostgresEfCore;
 
@@ -21,9 +23,17 @@ public class TransactionRepository(TransactionsDbContext dbContext) : ITransacti
         var transactionEntity = transaction.Adapt<TransactionEntity>();
         
         await dbContext.AddAsync(transactionEntity);
-        await dbContext.SaveChangesAsync();
-        
-        //todo Excetion
+
+        try
+        {
+            await dbContext.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ex?.InnerException is PostgresException { SqlState: "P0003" })
+        {
+            throw new RowLimitExceededException();
+        }
+
+        //Пришёл к выводу, что какое-то особое исключение не потребуется
         return transactionEntity.CreatedAt?.ToLocalTime() ?? throw new Exception("TransactionEntity.CreatedAt should not be null after insert");
     }
 
@@ -32,7 +42,7 @@ public class TransactionRepository(TransactionsDbContext dbContext) : ITransacti
         var result = await dbContext.Transactions.FirstOrDefaultAsync(t => t.Id == id);
         
         if (result == null)
-            throw new KeyNotFoundException($"Transaction with id {id} not found");
+            throw new KeyNotFoundException($"Transaction with id {id} was not found");
         
         return result.Adapt<Transaction>();
     }

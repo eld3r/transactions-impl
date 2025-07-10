@@ -14,6 +14,7 @@ public class TransactionServiceTests
     private static ITransactionRepository _transactionRepository = null!;
 
     private static readonly DateTime CreatedDt = new DateTime(2025, 7, 7, 0, 0, 0, DateTimeKind.Utc);
+    
     [ClassInitialize]
     public static void Init(TestContext context)
     {
@@ -35,8 +36,8 @@ public class TransactionServiceTests
     [TestMethod]
     public async Task CreateTransactionResultMappingTest()
     {
-        A.CallTo(() => _transactionRepository.CreateAsync(A<Transactions.Domain.Transaction>._))
-            .ReturnsLazily((Transactions.Domain.Transaction transaction) => CreatedDt);
+        A.CallTo(() => _transactionRepository.CreateAsync(A<Domain.Transaction>._))
+            .ReturnsLazily((Transactions.Domain.Transaction _) => CreatedDt);
         
         var target = CreateService();
         var result = await target.CreateAsync(new SetTransactionRequest());
@@ -48,10 +49,10 @@ public class TransactionServiceTests
     [TestMethod]
     public async Task CreateTransactionInputMappingTest()
     {
-        Transactions.Domain.Transaction calledTransaction = null!;
+        Domain.Transaction calledTransaction = null!;
 
-        A.CallTo(() => _transactionRepository.CreateAsync(A<Transactions.Domain.Transaction>._))
-            .Invokes((Transactions.Domain.Transaction transaction) =>
+        A.CallTo(() => _transactionRepository.CreateAsync(A<Domain.Transaction>._))
+            .Invokes((Domain.Transaction transaction) =>
             {
                 calledTransaction = transaction;
             })
@@ -66,7 +67,7 @@ public class TransactionServiceTests
             TransactionDate = DateTime.Today
         };
         
-        var result = await target.CreateAsync(request);
+        await target.CreateAsync(request);
         
         calledTransaction.PrintToConsole().ShouldNotBeNull();
         calledTransaction.Amount.ShouldBe(request.Amount);
@@ -77,7 +78,7 @@ public class TransactionServiceTests
     [TestMethod]
     public async Task GetTransactionResultMappingTest()
     {
-        var sampleTransaction = new Transactions.Domain.Transaction
+        var sampleTransaction = new Domain.Transaction
         {
             Amount = 123m,
             TransactionDate = DateTime.Today,

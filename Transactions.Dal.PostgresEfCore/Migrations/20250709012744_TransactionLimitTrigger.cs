@@ -13,7 +13,7 @@ namespace Transactions.Dal.PostgresEfCore.Migrations
                 RETURNS trigger AS $$
                 BEGIN
                     IF (SELECT COUNT(*) FROM ""transactions"") >= 100 THEN
-                        RAISE EXCEPTION 'Cannot insert more than 100 transactions';
+                        RAISE EXCEPTION 'Cannot insert more than 100 transactions' USING ERRCODE = 'P0003';
                     END IF;
                     RETURN NEW;
                 END;

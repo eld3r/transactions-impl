@@ -6,6 +6,7 @@ using Transactions.Dal;
 using Transactions.Dal.PostgresEfCore;
 using Transactions.Dal.PostgresEfCore.Model;
 using Transactions.Domain;
+using Transactions.Domain.Exceptions;
 
 namespace Transactions.Tests.Integration;
 
@@ -47,7 +48,7 @@ public class TransactionRepositoryTests
     {
         var target = _serviceProvider.GetRequiredService<ITransactionRepository>();
 
-        var transaction = new Domain.Transaction()
+        var transaction = new Transaction()
             { Id = Guid.NewGuid(), Amount = 100, TransactionDate = DateTime.Now };
         
         await target.CreateAsync(transaction);
@@ -90,6 +91,14 @@ public class TransactionRepositoryTests
         result.Amount.ShouldBe(transactionEntity.Amount);
         result.TransactionDate.ShouldBe(transactionEntity.TransactionDate.ToLocalTime().DropSeventhDigit());
     }
+    
+    [TestMethod]
+    public async Task GetNonExistentTest()
+    {
+        var target = _serviceProvider.GetRequiredService<ITransactionRepository>();
+
+        await Should.ThrowAsync<KeyNotFoundException>(target.GetAsync(Guid.NewGuid()));
+    }
 
     [TestMethod]
     public async Task CreateTransactionsOverLimitTest()
@@ -107,7 +116,7 @@ public class TransactionRepositoryTests
                 await target.CreateAsync(new Transaction
                     { Id = Guid.NewGuid(), Amount = 1000 + i, TransactionDate = DateTime.Now });
             }
-            catch(DbUpdateException ex)
+            catch(RowLimitExceededException)
             {
                 break;
             }

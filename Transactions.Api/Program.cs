@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Transactions.Api.Extensions;
+using Transactions.Api.Helpers;
 using Transactions.Api.Middlewares;
 using Transactions.Dal.PostgresEfCore;
 
@@ -31,21 +34,27 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.InvalidModelStateResponseFactory = context =>
     {
-        var problemDetails = new ValidationProblemDetails(context.ModelState)
-        {
-            Title = "One or more validation errors occurred.",
-            Status = StatusCodes.Status400BadRequest,
-            //todo: подумать ою идентификаторах
-            Type = "about:blank",
-            Instance = context.HttpContext.Request.Path
-        };
+        var problemDetails = new ProblemDetailsBuilder()
+            .WithStatus(StatusCodes.Status422UnprocessableEntity)
+            .WithTitle("One or more validation errors occurred.")
+            .WithType("https://api.example.com/probs/validation")
+            .WithInstance(context.HttpContext.Request.Path)
+            .Build(context.ModelState);
 
-        return new BadRequestObjectResult(problemDetails)
+        return new UnprocessableEntityObjectResult(problemDetails)
         {
             ContentTypes = { "application/problem+json" }
         };
     };
 });
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/app.log", rollingInterval: RollingInterval.Day)
+    // .WriteTo.Elasticsearch - как дальнейшее развитие
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 var app = builder.Build();
 
@@ -68,6 +77,6 @@ app.UseCors(opts => opts
     .AllowAnyMethod()
     .AllowAnyHeader());
 
-app.UseMiddleware<ProblemDetails500Middleware>();
+app.UseMiddleware<ProblemDetailsExceptionMiddleware>();
 app.MapControllers();
 app.Run();
