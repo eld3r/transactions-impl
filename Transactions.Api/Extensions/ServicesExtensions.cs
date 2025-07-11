@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Transactions.Api.Mapping;
 using Transactions.Api.Services;
 using Transactions.Dal.PostgresEfCore.Mapping;
 
@@ -9,7 +10,8 @@ public static class ServicesExtensions
     public static IServiceCollection AddMapster(this IServiceCollection services)
     {
         var typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
-        typeAdapterConfig.Scan(typeof(TransactionConfig).Assembly);
+        typeAdapterConfig.Scan(typeof(TransactionDalConfig).Assembly);
+        typeAdapterConfig.Scan(typeof(TransactionServiceConfig).Assembly);
         services.AddSingleton(typeAdapterConfig);
         return services;
     }

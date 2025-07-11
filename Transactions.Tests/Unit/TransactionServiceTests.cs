@@ -1,9 +1,11 @@
 using FakeItEasy;
+using Mapster;
 using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
 using Transactions.Api.Contracts;
 using Transactions.Api.Services;
 using Transactions.Dal;
+using Transactions.Domain.Exceptions;
 
 namespace Transactions.Tests.Unit;
 
@@ -11,35 +13,40 @@ namespace Transactions.Tests.Unit;
 [TestCategory("Unit")]
 public class TransactionServiceTests
 {
-    private static ITransactionRepository _transactionRepository = null!;
-
     private static readonly DateTime CreatedDt = new DateTime(2025, 7, 7, 0, 0, 0, DateTimeKind.Utc);
     
     [ClassInitialize]
     public static void Init(TestContext context)
     {
-        _transactionRepository = A.Fake<ITransactionRepository>();
+        
     }
 
-    private ITransactionService CreateService() =>
-        new TransactionService(_transactionRepository,
+    private ITransactionService CreateService(out ITransactionRepository repository)
+    {
+        repository = A.Fake<ITransactionRepository>();
+        return new TransactionService(repository,
             NullLogger<TransactionService>.Instance
         );
+    }
 
     [TestMethod]
     public async Task CreateTransactionNullRequestTest()
     {
-        var target = CreateService();
+        var target = CreateService(out _);
         await Should.ThrowAsync<ArgumentNullException>( target.CreateAsync(null!));
     }
     
     [TestMethod]
     public async Task CreateTransactionResultMappingTest()
     {
-        A.CallTo(() => _transactionRepository.CreateAsync(A<Domain.Transaction>._))
+        var target = CreateService(out var repository);
+        
+        A.CallTo(() => repository.CreateAsync(A<Domain.Transaction>._))
             .ReturnsLazily((Transactions.Domain.Transaction _) => CreatedDt);
         
-        var target = CreateService();
+        A.CallTo(() => repository.GetByIdAsync(A<Guid>._))
+            .Returns(Task.FromResult(default((Domain.Transaction, DateTime))));
+        
         var result = await target.CreateAsync(new SetTransactionRequest());
         
         result.ShouldNotBeNull();
@@ -51,14 +58,17 @@ public class TransactionServiceTests
     {
         Domain.Transaction calledTransaction = null!;
 
-        A.CallTo(() => _transactionRepository.CreateAsync(A<Domain.Transaction>._))
+        var target = CreateService(out var repository);
+        
+        A.CallTo(() => repository.CreateAsync(A<Domain.Transaction>._))
             .Invokes((Domain.Transaction transaction) =>
             {
                 calledTransaction = transaction;
             })
             .Returns(Task.FromResult(CreatedDt));
         
-        var target = CreateService();
+        A.CallTo(() => repository.GetByIdAsync(A<Guid>._))
+            .Returns(Task.FromResult(default((Domain.Transaction, DateTime))));
 
         var request = new SetTransactionRequest
         {
@@ -84,12 +94,10 @@ public class TransactionServiceTests
             TransactionDate = DateTime.Today,
             Id = Guid.NewGuid()
         };
-
-        A.CallTo(() => _transactionRepository.GetByIdAsync(A<Guid>._))
+        var target = CreateService(out var repository);
+        
+        A.CallTo(() => repository.GetByIdAsync(A<Guid>._))
             .ReturnsLazily((Guid transactionId) => (sampleTransaction with { Id = transactionId }, DateTime.Now));
-        
-        var target = CreateService();
-        
 
         var result = await target.GetAsync(sampleTransaction.Id);
         
@@ -97,5 +105,55 @@ public class TransactionServiceTests
         result.Amount.ShouldBe(sampleTransaction.Amount);
         result.TransactionDate.ShouldBe(sampleTransaction.TransactionDate);
         result.Id.ShouldBe(sampleTransaction.Id);
+    }
+    
+    [TestMethod]
+    public async Task CreateSameRepeatedTransactionTest()
+    {
+        var target = CreateService(out var repository);
+
+        var insertDate = DateTime.Today.AddTicks(-12345);
+        
+        var request = new Domain.Transaction
+        {
+            Amount = 99.99m,
+            Id = Guid.NewGuid(),
+            TransactionDate = DateTime.Today
+        };
+        
+        A.CallTo(() => repository.GetByIdAsync(A<Guid>._))
+            .Returns(Task.FromResult((request, insertDate)));
+
+        var result = await target.CreateAsync(request.Adapt<SetTransactionRequest>());
+        result.InsertDateTime.ShouldBe(insertDate);
+        
+        A.CallTo(() => repository.CreateAsync(A<Domain.Transaction>._)).MustNotHaveHappened();
+    }
+    
+    [TestMethod]
+    public async Task CreateDifferentRepeatedTransactionTest()
+    {
+        var target = CreateService(out var repository);
+        
+        var request = new Domain.Transaction
+        {
+            Amount = 99.99m,
+            Id = Guid.NewGuid(),
+            TransactionDate = DateTime.Today
+        };
+        
+        A.CallTo(() => repository.GetByIdAsync(A<Guid>._))
+            .Returns(Task.FromResult((request with { Amount = 99.999m }, DateTime.Now)));
+
+        await Should.ThrowAsync<TransactionConflictException>(
+            target.CreateAsync(request.Adapt<SetTransactionRequest>()));
+        
+        A.CallTo(() => repository.GetByIdAsync(A<Guid>._))
+            .Returns(Task.FromResult((request with { TransactionDate = request.TransactionDate.AddMicroseconds(1) }, DateTime.Now)));
+
+        await Should.ThrowAsync<TransactionConflictException>(
+            target.CreateAsync(request.Adapt<SetTransactionRequest>()));
+        
+        A.CallTo(() => repository.CreateAsync(A<Domain.Transaction>._)).MustNotHaveHappened();
     }
 }

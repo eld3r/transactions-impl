@@ -12,13 +12,6 @@ public class TransactionRepository(TransactionsDbContext dbContext) : ITransacti
     public async Task<DateTime> CreateAsync(Transaction transaction)
     {
         ArgumentNullException.ThrowIfNull(transaction);
-
-        var existingItem = await dbContext.Transactions.FirstOrDefaultAsync(t => t.Id == transaction.Id);
-        if (existingItem != null)
-        {
-            return existingItem.CreatedAt ??
-                   throw new Exception($"TransactionEntity.CreatedAt should not be null for existing transaction");
-        }
         
         var transactionEntity = transaction.Adapt<TransactionEntity>();
         
@@ -37,12 +30,12 @@ public class TransactionRepository(TransactionsDbContext dbContext) : ITransacti
         return transactionEntity.CreatedAt?.ToLocalTime() ?? throw new Exception("TransactionEntity.CreatedAt should not be null after insert");
     }
 
-    public async Task<(Transaction transaction, DateTime insertDate)> GetByIdAsync(Guid id)
+    public async Task<(Transaction transaction, DateTime insertDateTime)> GetByIdAsync(Guid id)
     {
         var result = await dbContext.Transactions.FirstOrDefaultAsync(t => t.Id == id);
         
         if (result == null)
-            throw new KeyNotFoundException($"Transaction with id {id} was not found");
+            return default;
 
         return (result.Adapt<Transaction>(),
             result.CreatedAt?.ToLocalTime() ?? throw new Exception("TransactionEntity.CreatedAt should not be null"));

@@ -2,6 +2,7 @@
 using Transactions.Api.Contracts;
 using Transactions.Dal;
 using Transactions.Domain;
+using Transactions.Domain.Exceptions;
 
 namespace Transactions.Api.Services;
 
@@ -10,15 +11,22 @@ public class TransactionService(
 {
     public async Task<SetTransactionResponse> CreateAsync(SetTransactionRequest request)
     {
-        //todo: Возможно, нужно переосмыслить поведение сервиса: проверку транзакции
-        //на существование нужно бы осуществлять именно здесь, а так же проверять остальные 
-        //параметры и выкидывать птичку, если что-то не сходится при повторной отправке
-        //с другими суммой или датой
         ArgumentNullException.ThrowIfNull(request);
-
-        logger.LogInformation("Creating a new transaction with id {Guid}", request.Id);
         
         var transaction = request.Adapt<Transaction>();
+        
+        var existingItem = await transactionRepository.GetByIdAsync(request.Id);
+        if (existingItem != default)
+        {
+            if (!existingItem.transaction.Equals(transaction)) 
+                throw new TransactionConflictException(request.Id);
+            
+            logger.LogInformation("Transaction with id {Guid} and same data already exists", request.Id);
+            return new SetTransactionResponse() { InsertDateTime = existingItem.insertDateTime };
+        }
+        
+        logger.LogInformation("Creating a new transaction with id {Guid}", request.Id);
+        
         var insertDateTime = await transactionRepository.CreateAsync(transaction);
         return new SetTransactionResponse() { InsertDateTime = insertDateTime };
     }
@@ -27,6 +35,10 @@ public class TransactionService(
     {
         logger.LogInformation("Getting a transaction with id {Guid}", id);
         var transaction = await transactionRepository.GetByIdAsync(id);
-        return transaction.Adapt<GetTransactionResponse>();
+        
+        if (transaction == default)
+            throw new KeyNotFoundException($"Transaction with id {id} was not found");
+        
+        return transaction.transaction.Adapt<GetTransactionResponse>();
     }
 }

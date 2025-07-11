@@ -90,7 +90,7 @@ public class TransactionRepositoryTests
         result.transaction.Id.ShouldBe(transactionEntity.Id);
         result.transaction.Amount.ShouldBe(transactionEntity.Amount);
         result.transaction.TransactionDate.ShouldBe(transactionEntity.TransactionDate.ToLocalTime().DropSeventhDigit());
-        result.insertDate.ShouldBeGreaterThan(DateTime.Now.AddMinutes(-1));
+        result.insertDateTime.ShouldBeGreaterThan(DateTime.Now.AddMinutes(-1));
     }
     
     [TestMethod]
@@ -98,7 +98,9 @@ public class TransactionRepositoryTests
     {
         var target = _serviceProvider.GetRequiredService<ITransactionRepository>();
 
-        await Should.ThrowAsync<KeyNotFoundException>(target.GetByIdAsync(Guid.NewGuid()));
+        var result = await target.GetByIdAsync(Guid.NewGuid());
+        
+        result.transaction.ShouldBeNull();
     }
 
     [TestMethod]

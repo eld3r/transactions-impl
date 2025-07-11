@@ -29,13 +29,25 @@ public class ProblemDetailsExceptionMiddleware(RequestDelegate next, ILogger<Pro
             //величину 100 можно было бы вынести в константы или даже настройки, но она в миграции с триггером, поэтому пока изменения не требуются, оставим так
             var problemDetails = new ProblemDetailsBuilder()
                 .WithStatus(StatusCodes.Status409Conflict)
-                .WithTitle("Row limit exceeded")
+                .WithTitle("Transaction count limit exceeded")
                 .WithDetail("Maximum transaction count is 100")
-                .WithType("https://api.example.com/probs/row-limit-exceeded")
+                .WithType("https://api.example.com/probs/transaction-limit-exceeded")
                 .WithInstance(context.Request.Path)
                 .Build();
             
             await Write(problemDetails, context, rlcee);
+        }
+        catch (TransactionConflictException tce)
+        {
+            var problemDetails = new ProblemDetailsBuilder()
+                .WithStatus(StatusCodes.Status409Conflict)
+                .WithTitle("Transaction consistency violated")
+                .WithDetail("The data of the transferred transaction differs from the existing one")
+                .WithType("https://api.example.com/probs/transaction-consitency-violated")
+                .WithInstance(context.Request.Path)
+                .Build();
+            
+            await Write(problemDetails, context, tce);
         }
         catch (Exception ex)
         {

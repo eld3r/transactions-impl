@@ -4,7 +4,7 @@ using Transactions.Domain;
 
 namespace Transactions.Dal.PostgresEfCore.Mapping;
 
-public class TransactionConfig : IRegister
+public class TransactionDalConfig : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
