@@ -1,0 +1,333 @@
+{
+	"info": {
+		"_postman_id": "261fa3b9-6096-455b-93bb-9a3266d3f095",
+		"name": "Transactions.Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14626702"
+	},
+	"item": [
+		{
+			"name": "docker.left",
+			"item": [
+				{
+					"name": "Transaction",
+					"item": [
+						{
+							"name": "/api/Transaction",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"const id = response.id;\r",
+											"\r",
+											"if (id) {\r",
+											"    pm.globals.set(\"createdTransactionId\", id); // или заменить на pm.environment.set(...)\r",
+											"    console.log(\"createdTransactionId set to:\", id);\r",
+											"} else {\r",
+											"    console.warn(\"ID not found in response.\");\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 19069829.402234942,\n  \"id\": \"a00ac9f9-b8a8-0a65-c5e0-3ebfd15645de\",\n  \"transactionDate\": \"2006-07-05T16:27:23.226Z\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrlLeft}}/api/Transaction",
+									"host": [
+										"{{baseUrlLeft}}"
+									],
+									"path": [
+										"api",
+										"Transaction"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/api/Transaction/:id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrlLeft}}/api/Transaction/a00ac9f9-b8a8-0a65-c5e0-3ebfd15645df",
+									"host": [
+										"{{baseUrlLeft}}"
+									],
+									"path": [
+										"api",
+										"Transaction",
+										"a00ac9f9-b8a8-0a65-c5e0-3ebfd15645df"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "docker.right",
+			"item": [
+				{
+					"name": "/api/Transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"    const requestBody = pm.request.body;\r",
+									"    let requestJson;\r",
+									"\r",
+									"    try {\r",
+									"        requestJson = JSON.parse(requestBody.raw);\r",
+									"        const id = requestJson.id;\r",
+									"\r",
+									"        if (id) {\r",
+									"            pm.globals.set(\"createdTransactionId\", id);\r",
+									"            console.log(\"createdTransactionId set to:\", id);\r",
+									"        } else {\r",
+									"            console.warn(\"ID not found in request body.\");\r",
+									"        }\r",
+									"    } catch (e) {\r",
+									"        console.error(\"Failed to parse request body as JSON:\", e);\r",
+									"    }\r",
+									"} else {\r",
+									"    console.log(\"Response status is not 200. Skipping ID extraction.\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "text/plain"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 19069829.404234942,\n  \"id\": \"a00ac9f9-b8a8-0a65-c5e0-3ebfd156452e\",\n  \"transactionDate\": \"2006-07-05T16:27:23.226Z\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrlRight}}/api/Transaction",
+							"host": [
+								"{{baseUrlRight}}"
+							],
+							"path": [
+								"api",
+								"Transaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/Transaction/:id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "text/plain"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrlRight}}/api/Transaction/{{createdTransactionId}}",
+							"host": [
+								"{{baseUrlRight}}"
+							],
+							"path": [
+								"api",
+								"Transaction",
+								"{{createdTransactionId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "localhost:7130",
+			"item": [
+				{
+					"name": "/api/Transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"    const requestBody = pm.request.body;\r",
+									"    let requestJson;\r",
+									"\r",
+									"    try {\r",
+									"        requestJson = JSON.parse(requestBody.raw);\r",
+									"        const id = requestJson.id;\r",
+									"\r",
+									"        if (id) {\r",
+									"            pm.globals.set(\"createdTransactionId\", id);\r",
+									"            console.log(\"createdTransactionId set to:\", id);\r",
+									"        } else {\r",
+									"            console.warn(\"ID not found in request body.\");\r",
+									"        }\r",
+									"    } catch (e) {\r",
+									"        console.error(\"Failed to parse request body as JSON:\", e);\r",
+									"    }\r",
+									"} else {\r",
+									"    console.log(\"Response status is not 200. Skipping ID extraction.\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "text/plain"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 19069829.404234942,\n  \"id\": \"a00ac9f9-b8a8-0a65-c5e0-3ebfd156452f\",\n  \"transactionDate\": \"2006-07-05T16:27:23.226Z\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrlLocalhostHttps}}/api/Transaction",
+							"host": [
+								"{{baseUrlLocalhostHttps}}"
+							],
+							"path": [
+								"api",
+								"Transaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/Transaction/:id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "text/plain"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrlLocalhostHttps}}/api/Transaction/{{createdTransactionId}}",
+							"host": [
+								"{{baseUrlLocalhostHttps}}"
+							],
+							"path": [
+								"api",
+								"Transaction",
+								"{{createdTransactionId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrlLeft",
+			"value": "localhost:5000"
+		},
+		{
+			"key": "baseUrlRight",
+			"value": "localhost:6000",
+			"type": "string"
+		},
+		{
+			"key": "baseUrlLocalhostHttps",
+			"value": "https://localhost:7130",
+			"type": "string"
+		}
+	]
+}
