@@ -32,7 +32,9 @@ public class TransactionRepository(TransactionsDbContext dbContext) : ITransacti
 
     public async Task<(Transaction transaction, DateTime insertDateTime)> GetByIdAsync(Guid id)
     {
-        var result = await dbContext.Transactions.FirstOrDefaultAsync(t => t.Id == id);
+        var result = await dbContext.Transactions
+            .AsNoTracking()
+            .FirstOrDefaultAsync(t => t.Id == id);
         
         if (result == null)
             return default;
