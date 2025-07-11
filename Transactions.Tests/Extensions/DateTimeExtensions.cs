@@ -2,7 +2,7 @@
 
 public static class DateTimeExtensions
 {
-    public static DateTime DropSeventhDigit(this DateTime dt)
+    public static DateTime ArrangeWithPgTimePrecision(this DateTime dt)
     {
         var ticks = dt.Ticks;
         var truncatedTicks = ticks - (ticks % 10);

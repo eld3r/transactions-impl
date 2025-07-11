@@ -61,7 +61,7 @@ public class TransactionRepositoryTests
             .PrintToConsole();
         transactionEntity.Id.ShouldBe(transaction.Id);
         transactionEntity.Amount.ShouldBe(transaction.Amount);
-        transactionEntity.TransactionDate.ShouldBe(transaction.TransactionDate.ToUniversalTime().DropSeventhDigit());
+        transactionEntity.TransactionDate.ShouldBe(transaction.TransactionDate.ToUniversalTime().ArrangeWithPgTimePrecision());
         transactionEntity.CreatedAt.ShouldNotBeNull()
             .ShouldBeGreaterThan(DateTime.Now.AddMinutes(-1).ToUniversalTime());
     }
@@ -89,8 +89,8 @@ public class TransactionRepositoryTests
         
         result.transaction.Id.ShouldBe(transactionEntity.Id);
         result.transaction.Amount.ShouldBe(transactionEntity.Amount);
-        result.transaction.TransactionDate.ShouldBe(transactionEntity.TransactionDate.ToLocalTime().DropSeventhDigit());
-        result.insertDateTime.ShouldBeGreaterThan(DateTime.Now.AddMinutes(-1));
+        result.transaction.TransactionDate.ShouldBe(transactionEntity.TransactionDate.ArrangeWithPgTimePrecision());
+        result.insertDateTime.ShouldBeGreaterThan(DateTime.Now.AddMinutes(-1).ToUniversalTime());
     }
     
     [TestMethod]

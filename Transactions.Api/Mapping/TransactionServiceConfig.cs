@@ -9,6 +9,7 @@ public class TransactionServiceConfig : IRegister
     public void Register(TypeAdapterConfig config)
     {
         config.ForType<SetTransactionRequest, Transaction>()
-            .Map(dest => dest.Amount, src => Math.Round(src.Amount, 4));
+            .Map(dest => dest.Amount, src => Math.Round(src.Amount, 4))
+            ;
     }
 }

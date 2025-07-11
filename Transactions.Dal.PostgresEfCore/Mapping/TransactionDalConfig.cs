@@ -10,8 +10,5 @@ public class TransactionDalConfig : IRegister
     {
         config.ForType<Transaction, TransactionEntity>()
             .Map(dest => dest.TransactionDate, src => src.TransactionDate.ToUniversalTime());
-        
-        config.ForType<TransactionEntity, Transaction>()
-            .Map(dest => dest.TransactionDate, src => src.TransactionDate.ToLocalTime());
     }
 }

@@ -21,7 +21,8 @@ public class TransactionService(
             if (!existingItem.transaction.Equals(transaction)) 
                 throw new TransactionConflictException(request.Id);
             
-            logger.LogInformation("Transaction with id {Guid} and same data already exists", request.Id);
+            logger.LogInformation("Transaction with id {Guid} and same data already exists. " +
+                                  "Returning created time of existing one", request.Id);
             return new SetTransactionResponse() { InsertDateTime = existingItem.insertDateTime };
         }
         

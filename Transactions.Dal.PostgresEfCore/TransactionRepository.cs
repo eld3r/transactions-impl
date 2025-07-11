@@ -27,7 +27,7 @@ public class TransactionRepository(TransactionsDbContext dbContext) : ITransacti
         }
 
         //Пришёл к выводу, что какое-то особое исключение не потребуется
-        return transactionEntity.CreatedAt?.ToLocalTime() ?? throw new Exception("TransactionEntity.CreatedAt should not be null after insert");
+        return transactionEntity.CreatedAt ?? throw new Exception("TransactionEntity.CreatedAt should not be null after insert");
     }
 
     public async Task<(Transaction transaction, DateTime insertDateTime)> GetByIdAsync(Guid id)
@@ -38,6 +38,6 @@ public class TransactionRepository(TransactionsDbContext dbContext) : ITransacti
             return default;
 
         return (result.Adapt<Transaction>(),
-            result.CreatedAt?.ToLocalTime() ?? throw new Exception("TransactionEntity.CreatedAt should not be null"));
+            result.CreatedAt ?? throw new Exception("TransactionEntity.CreatedAt should not be null"));
     }
 }
