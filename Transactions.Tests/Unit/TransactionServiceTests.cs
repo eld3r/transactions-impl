@@ -84,9 +84,9 @@ public class TransactionServiceTests
             TransactionDate = DateTime.Today,
             Id = Guid.NewGuid()
         };
-        
-        A.CallTo(() =>  _transactionRepository.GetAsync(A<Guid>._))
-            .ReturnsLazily((Guid transactionId) => sampleTransaction with { Id = transactionId });
+
+        A.CallTo(() => _transactionRepository.GetByIdAsync(A<Guid>._))
+            .ReturnsLazily((Guid transactionId) => (sampleTransaction with { Id = transactionId }, DateTime.Now));
         
         var target = CreateService();
         

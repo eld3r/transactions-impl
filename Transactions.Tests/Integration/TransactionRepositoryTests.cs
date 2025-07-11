@@ -81,15 +81,16 @@ public class TransactionRepositoryTests
             await dbContext.SaveChangesAsync();
         }
         
-        var result = await target.GetAsync(transactionEntity.Id);
+        var result = await target.GetByIdAsync(transactionEntity.Id);
         
-        result
+        result.transaction
             .ShouldNotBeNull()
             .PrintToConsole();
         
-        result.Id.ShouldBe(transactionEntity.Id);
-        result.Amount.ShouldBe(transactionEntity.Amount);
-        result.TransactionDate.ShouldBe(transactionEntity.TransactionDate.ToLocalTime().DropSeventhDigit());
+        result.transaction.Id.ShouldBe(transactionEntity.Id);
+        result.transaction.Amount.ShouldBe(transactionEntity.Amount);
+        result.transaction.TransactionDate.ShouldBe(transactionEntity.TransactionDate.ToLocalTime().DropSeventhDigit());
+        result.insertDate.ShouldBeGreaterThan(DateTime.Now.AddMinutes(-1));
     }
     
     [TestMethod]
@@ -97,7 +98,7 @@ public class TransactionRepositoryTests
     {
         var target = _serviceProvider.GetRequiredService<ITransactionRepository>();
 
-        await Should.ThrowAsync<KeyNotFoundException>(target.GetAsync(Guid.NewGuid()));
+        await Should.ThrowAsync<KeyNotFoundException>(target.GetByIdAsync(Guid.NewGuid()));
     }
 
     [TestMethod]

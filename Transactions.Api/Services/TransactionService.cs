@@ -26,7 +26,7 @@ public class TransactionService(
     public async Task<GetTransactionResponse> GetAsync(Guid id)
     {
         logger.LogInformation("Getting a transaction with id {Guid}", id);
-        var transaction = await transactionRepository.GetAsync(id);
+        var transaction = await transactionRepository.GetByIdAsync(id);
         return transaction.Adapt<GetTransactionResponse>();
     }
 }

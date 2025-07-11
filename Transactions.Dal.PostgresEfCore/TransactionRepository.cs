@@ -37,13 +37,14 @@ public class TransactionRepository(TransactionsDbContext dbContext) : ITransacti
         return transactionEntity.CreatedAt?.ToLocalTime() ?? throw new Exception("TransactionEntity.CreatedAt should not be null after insert");
     }
 
-    public async Task<Transaction> GetAsync(Guid id)
+    public async Task<(Transaction transaction, DateTime insertDate)> GetByIdAsync(Guid id)
     {
         var result = await dbContext.Transactions.FirstOrDefaultAsync(t => t.Id == id);
         
         if (result == null)
             throw new KeyNotFoundException($"Transaction with id {id} was not found");
-        
-        return result.Adapt<Transaction>();
+
+        return (result.Adapt<Transaction>(),
+            result.CreatedAt?.ToLocalTime() ?? throw new Exception("TransactionEntity.CreatedAt should not be null"));
     }
 }
