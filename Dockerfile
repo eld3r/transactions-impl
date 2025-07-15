@@ -8,8 +8,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Transactions.Api/Transactions.Api.csproj", "Transactions.Api/"]
-COPY ["Transactions.Services/Transactions.Services.csproj", "Transactions.Services/"]
-COPY ["Transactions.Services.Impl/Transactions.Services.Impl.csproj", "Transactions.Services.Impl/"]
 COPY ["Transactions.Dal/Transactions.Dal.csproj", "Transactions.Dal/"]
 COPY ["Transactions.Domain/Transactions.Domain.csproj", "Transactions.Domain/"]
 COPY ["Transactions.Dal.PostgresEfCore/Transactions.Dal.PostgresEfCore.csproj", "Transactions.Dal.PostgresEfCore/"]
